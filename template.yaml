@@ -58,6 +58,7 @@ spec:
         copyWithoutRender:
           - .github/workflows/*
         values:
+          teste: '{{ parameters.teste }}'
           component_id: '{{ parameters.component_id }}'
           description: '{{ parameters.description }}'
           destination: '{{ parseRepoUrl parameters.repoUrl }}'
