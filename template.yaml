@@ -35,6 +35,7 @@ spec:
           title: escolha
           type: boolean
           description: escolha uma opcao
+          default: true
         escolha2:
           title: escolha2
           type: boolean
