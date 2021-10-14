@@ -2,3 +2,5 @@ ${{values.description}}
 "${{values.owner}}"
 [${{values.description}}]
 [${{values.teste}}]
+${{values.escolha1}}
+${{values.escolha2}}

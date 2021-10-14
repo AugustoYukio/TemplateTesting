@@ -28,8 +28,17 @@ spec:
         teste:
           title: Lista
           type: array
+          description: Lista de subnets privadas
           items:
             type: string
+        escolha1:
+          title: escolha
+          type: boolean
+          description: escolha uma opcao
+        escolha2:
+          title: escolha2
+          type: boolean
+          description: escolha uma opcao
         owner:
           title: Owner
           type: string
@@ -58,6 +67,8 @@ spec:
         copyWithoutRender:
           - .github/workflows/*
         values:
+          escolha1: '{{ parameters.escolha1 }}'
+          escolha2: '{{ parameters.escolha2 }}'
           teste: '{{ parameters.teste }}'
           component_id: '{{ parameters.component_id }}'
           description: '{{ parameters.description }}'
