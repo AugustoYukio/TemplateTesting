@@ -72,17 +72,29 @@ spec:
           title: Habilitar NAT Gateway
           type: boolean
           description: Habilitar NAT Gateway na VCP, caso não seja indicado o padrão sera definido como true
-        single_nat_gateway_prod:
-          title: NAT Gateway unico
-          type: boolean
-          description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
+        # single_nat_gateway_prod:
+        #   title: NAT Gateway unico
+        #   type: boolean
+        #   description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
         enable_dns_hostnames_prod:
           title: Habilitar DNS
           type: boolean
           description: Habilitar DNS hostnames na VPC, caso não seja indicado o padrão sera definido como true
       dependencies:
         enable_nat_gateway_prod:
-          - single_nat_gateway_prod
+          oneOf:
+            - properties:
+                enable_nat_gateway_prod:
+                  enum:
+                    - true
+                single_nat_gateway_prod:
+                  title: NAT Gateway unico
+                  type: boolean
+                  description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
+            - properties:
+                enable_nat_gateway_prod:
+                  enum:
+                    - false
     - title: Parametros da infraestrutura de qualidade
       required:
         - bucket_name_qa
