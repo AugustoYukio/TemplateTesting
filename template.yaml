@@ -41,7 +41,7 @@ spec:
             - "eu-north-1"
             - "me-south-1"
             - "sa-east-1"
-          description: Unique name of the component
+          description: Unique name of the
         description:
           title: Description
           type: string
