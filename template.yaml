@@ -19,7 +19,6 @@ spec:
         component_id:
           title: Name
           type: string
-          default: "us-east-1"
           examples:
             - "us-east-2"
             - "us-east-1"
