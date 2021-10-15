@@ -91,7 +91,7 @@ spec:
                   - true
               single_nat_gateway_prod:
                 type: boolean
-                description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
+                title: NAT Gateway unico
             - properties:
               enable_nat_gateway_prod:
                 enum:
