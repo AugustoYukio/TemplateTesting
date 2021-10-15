@@ -1,85 +1,149 @@
 apiVersion: backstage.io/v1beta2
 kind: Template
 metadata:
-  name: create-react-app-template
-  title: Create React App Template
-  description: Create a new CRA website project
+  name: infra-base-template
+  title: Template base de infraestrutura
+  description: Criar infraestrutura base
   tags:
-    - react
-    - cra
+    - recommended
+    - Terraform
 spec:
   owner: web@example.com
-  type: website
+  type: infra
+
   parameters:
-    - title: Provide some simple information
+    - title: Parametros gerais da infraestrutura
       required:
-        - component_id
+        - project_name
+        - region
         - owner
       properties:
-        component_id:
-          title: Name
+        project_name:
+          title: Nome do projeto
           type: string
-          examples:
-            - "us-east-2"
-            - "us-east-1"
-            - "us-west-1"
-            - "us-west-2"
-            - "af-south-1"
-            - "ap-east-1"
-            - "ap-south-1"
-            - "ap-northeast-3"
-            - "ap-northeast-2"
-            - "ap-southeast-1"
-            - "ap-southeast-2"
-            - "ap-northeast-1"
-            - "ca-central-1"
-            - "eu-central-1"
-            - "eu-west-1"
-            - "eu-west-2"
-            - "eu-south-1"
-            - "eu-west-3"
-            - "eu-north-1"
-            - "me-south-1"
-            - "sa-east-1"
-          description: Unique name of the
-        description:
-          title: Description
+          description: Nome do projeto
+        region:
+          title: Regiao
           type: string
-          description: Help others understand what this website is for.
-        teste:
-          title: Lista
-          type: array
-          description: Lista de subnets privadas
-          items:
-            type: string
-        escolha1:
-          title: escolha
-          type: boolean
-          description: escolha uma opcao
-          default: true
-        escolha2:
-          title: escolha2
-          type: boolean
-          description: escolha uma opcao
+          default: "us-east-1"
+          description: Regiao da AWS que serao criados os recursos de infra. Ex (us-east-1)
         owner:
-          title: Owner
+          title: Dono
           type: string
-          description: Owner of the component
+          description: Dono do componente
           ui:field: OwnerPicker
           ui:options:
-            allowedKinds: 
+            allowedKinds:
               - Group
-    - title: Choose a location  
+
+    - title: Parametros da infraestrutura de producao
+      required:
+        - bucket_name_prod
+        - key_path_prod
+        - cidr_prod
+        - private_subnets_prod
+        - public_subnets_prod
+      properties:
+        bucket_name_prod:
+          title: Nome do bucket
+          type: string
+          description: Nome do bucket que contem a chave de acesso
+        key_path_prod:
+          title: Caminho da chave
+          type: string
+          description: Caminho da chave de acesso dentro do bucket
+        cidr_prodcidr_prod:
+          title: CIDR
+          type: string
+          description: CIDR da VPC. Ex (10.133.0.0/16)
+        private_subnets_prod:
+          title: Lista das subnets privadas
+          type: array
+          description: Lista das subnets privadas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
+          items:
+            type: string
+        public_subnets_prod:
+          title: Lista das subnets publicas
+          type: array
+          description: Lista das subnets publicas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
+          items:
+            type: string
+        enable_nat_gateway_prod:
+          title: Habilitar NAT Gateway
+          type: boolean
+          description: Habilitar NAT Gateway na VCP, caso não seja indicado o padrão sera definido como true
+        single_nat_gateway_prod:
+          title: NAT Gateway unico
+          type: boolean
+          description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
+        enable_dns_hostnames_prod:
+          title: Habilitar DNS
+          type: boolean
+          description: Habilitar DNS hostnames na VPC, caso não seja indicado o padrão sera definido como true
+      dependencies:
+        enable_nat_gateway_prod:
+          - single_nat_gateway_prod
+    - title: Parametros da infraestrutura de qualidade
+      required:
+        - bucket_name_qa
+        - key_path_qa
+        - cidr_qa
+        - private_subnets_qa
+        - public_subnets_qa
+      properties:
+        bucket_name_qa:
+          title: Nome do bucket
+          type: string
+          description: Nome do bucket que contem a chave de acesso
+        key_path_qa:
+          title: Caminho da chave
+          type: string
+          description: Caminho da chave de acesso dentro do bucket
+        cidr_qa:
+          title: CIDR
+          type: string
+          description: CIDR da VPC. Ex (10.133.0.0/16)
+        private_subnets_prod:
+          title: Lista das subnets privadas
+          type: array
+          description: Lista das subnets privadas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
+          items:
+            type: string
+        public_subnets_prod:
+          title: Lista das subnets publicas
+          type: array
+          description: Lista das subnets publicas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
+          items:
+            type: string
+        enable_nat_gateway_prod:
+          title: Habilitar NAT Gateway
+          type: boolean
+          description: Habilitar NAT Gateway na VCP, caso não seja indicado o padrão sera definido como true
+        single_nat_gateway_prod:
+          title: NAT Gateway unico
+          type: boolean
+          description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
+        enable_dns_hostnames_prod:
+          title: Habilitar DNS
+          type: boolean
+          description: Habilitar DNS hostnames na VPC, caso não seja indicado o padrão sera definido como true
+      dependencies:
+        enable_nat_gateway_prod:
+          - single_nat_gateway_prod
+
+    - title: Escolher repositorio
       required:
         - repoUrl
-      properties: 
+      properties:
         repoUrl:
-          title: Repository Location
+          title: Repositorio
           type: string
           ui:field: RepoUrlPicker
           ui:options:
             allowedHosts:
               - github.com
+              - gitlab.inlabs.app
+
   steps:
     - id: template
       name: Fetch Skeleton + Template
@@ -87,22 +151,33 @@ spec:
       input:
         url: ./skeleton
         copyWithoutRender:
-          - .github/workflows/*
+          - .gitlab/workflows/*
         values:
-          escolha1: '{{ parameters.escolha1 }}'
-          escolha2: '{{ parameters.escolha2 }}'
-          teste: '{{ parameters.teste }}'
           component_id: '{{ parameters.component_id }}'
-          description: '{{ parameters.description }}'
-          destination: '{{ parseRepoUrl parameters.repoUrl }}'
-          owner: '{{ parameters.owner }}'
+          project_name: '{{ parameters.project_name }}'
+          bucket_name_prod: '{{ parameters.bucket_name_prod }}'
+          key_path_prod: '{{ parameters.key_path_prod }}'
+          cidr_prod: '{{ parameters.cidr_prod }}'
+          private_subnets_prod: '{{ parameters.private_subnets_prod }}'
+          public_subnets_prod: '{{ parameters.public_subnets_prod }}'
+          enable_nat_gateway_prod: '{{ parameters.enable_nat_gateway_prod }}'
+          single_nat_gateway_prod: '{{ parameters.single_nat_gateway_prod }}'
+          enable_dns_hostnames_prod: '{{ parameters.enable_dns_hostnames_prod }}'
+          bucket_name_qa: '{{ parameters.bucket_name_qa }}'
+          key_path_qa: '{{ parameters.key_path_qa }}'
+          cidr_qa: '{{ parameters.cidr_qa }}'
+          private_subnets_qa: '{{ parameters.private_subnets_qa }}'
+          public_subnets_qa: '{{ parameters.public_subnets_qa }}'
+          enable_nat_gateway_qa: '{{ parameters.enable_nat_gateway_qa }}'
+          single_nat_gateway_qa: '{{ parameters.single_nat_gateway_qa }}'
+          enable_dns_hostnames_qa: '{{ parameters.enable_dns_hostnames_qa }}'
 
     - id: publish
       name: Publish
-      action: publish:github
+      action: publish:gitlab
       input:
-        allowedHosts: ['github.com']
-        description: 'This is {{ parameters.component_id }}'
+        allowedHosts: ['gitlab.inlabs.app']
+        description: 'This is {{ parameters.project_name }}'
         repoUrl: '{{ parameters.repoUrl }}'
 
     - id: register
