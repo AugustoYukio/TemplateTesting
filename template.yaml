@@ -6,7 +6,7 @@ metadata:
   description: Criar infraestrutura base
   tags:
     - recommended
-    - Terraform
+    - terraform
 spec:
   owner: web@example.com
   type: infra
