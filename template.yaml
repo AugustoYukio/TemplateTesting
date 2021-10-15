@@ -71,14 +71,17 @@ spec:
         enable_nat_gateway_prod:
           title: Habilitar NAT Gateway
           type: boolean
+          default: true
           description: Habilitar NAT Gateway na VCP, caso não seja indicado o padrão sera definido como true
         single_nat_gateway_prod:
           title: NAT Gateway unico
           type: boolean
+          default: true
           description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
         enable_dns_hostnames_prod:
           title: Habilitar DNS
           type: boolean
+          default: true
           description: Habilitar DNS hostnames na VPC, caso não seja indicado o padrão sera definido como true
 
     - title: Parametros da infraestrutura de qualidade
@@ -116,16 +119,19 @@ spec:
         enable_nat_gateway_prod:
           title: Habilitar NAT Gateway
           type: boolean
+          default: true
           description: Habilitar NAT Gateway na VCP, caso não seja indicado o padrão sera definido como true
         single_nat_gateway_prod:
           title: NAT Gateway unico
           type: boolean
+          default: true
           description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
         enable_dns_hostnames_prod:
           title: Habilitar DNS
           type: boolean
+          default: true
           description: Habilitar DNS hostnames na VPC, caso não seja indicado o padrão sera definido como true
-
+          
     - title: Escolher repositorio
       required:
         - repoUrl
