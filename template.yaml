@@ -65,11 +65,13 @@ spec:
           description: Lista das subnets privadas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
           items:
             type: string
+            title: Subnet privada
         public_subnets_prod:
           title: Lista das subnets publicas
           type: array
           description: Lista das subnets publicas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
           items:
+            title: Subnet publica
             type: string
         enable_nat_gateway_prod:
           title: Habilitar NAT Gateway
@@ -113,12 +115,14 @@ spec:
           type: array
           description: Lista das subnets privadas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
           items:
+            title: Subnet privada
             type: string
         public_subnets_qa:
           title: Lista das subnets publicas
           type: array
           description: Lista das subnets publicas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
           items:
+            title: Subnet publica
             type: string
         enable_nat_gateway_qa:
           title: Habilitar NAT Gateway
