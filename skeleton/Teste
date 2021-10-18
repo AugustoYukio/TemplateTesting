@@ -1,1 +1,1 @@
-${{values.component_id}}
+${{values.region}}
