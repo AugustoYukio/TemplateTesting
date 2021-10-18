@@ -175,11 +175,11 @@ spec:
 
     - id: publish
       name: Publish
-      action: publish:gitlab
+      action: publish:github
       input:
-        allowedHosts: ['gitlab.inlabs.app']
-        description: 'This is {{ parameters.project_name }}'
-        repoUrl: '{{ parameters.repoUrl }}'
+        allowedHosts: ["github.com"]
+        description: "This is {{ parameters.component_id }}"
+        repoUrl: "{{ parameters.repoUrl }}"
 
     - id: register
       name: Register
