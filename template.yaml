@@ -21,6 +21,7 @@ spec:
         project_name:
           title: Nome do projeto
           type: string
+          ui:autofocus: true
           description: Nome do projeto
         region:
           title: Regiao
@@ -48,6 +49,7 @@ spec:
         bucket_name_prod:
           title: Nome do bucket
           type: string
+          ui:autofocus: true
           description: Nome do bucket que contem a chave de acesso
         key_path_prod:
           title: Caminho da chave
@@ -96,6 +98,7 @@ spec:
         bucket_name_qa:
           title: Nome do bucket
           type: string
+          ui:autofocus: true
           description: Nome do bucket que contem a chave de acesso
         key_path_qa:
           title: Caminho da chave
