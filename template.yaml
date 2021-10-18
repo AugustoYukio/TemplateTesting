@@ -36,66 +36,67 @@ spec:
             allowedKinds:
               - Group
 
-    - title: Parametros da infraestrutura de producao
-      required:
-        - bucket_name_prod
-        - key_path_prod
-        - cidr_prod
-        - private_subnets_prod
-        - public_subnets_prod
-      properties:
-        bucket_name_prod:
-          title: Nome do bucket
-          type: string
-          description: Nome do bucket que contem a chave de acesso
-        key_path_prod:
-          title: Caminho da chave
-          type: string
-          description: Caminho da chave de acesso dentro do bucket
-        cidr_prodcidr_prod:
-          title: CIDR
-          type: string
-          description: CIDR da VPC. Ex (10.133.0.0/16)
-        private_subnets_prod:
-          title: Lista das subnets privadas
-          type: array
-          description: Lista das subnets privadas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
-          items:
-            type: string
-        public_subnets_prod:
-          title: Lista das subnets publicas
-          type: array
-          description: Lista das subnets publicas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
-          items:
-            type: string
-        enable_nat_gateway_prod:
-          title: Habilitar NAT Gateway
-          type: boolean
-          description: Habilitar NAT Gateway na VCP, caso não seja indicado o padrão sera definido como true
-        # single_nat_gateway_prod:
-        #   title: NAT Gateway unico
-        #   type: boolean
-        #   default: true
-        #   description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
-        enable_dns_hostnames_prod:
-          title: Habilitar DNS
-          type: boolean
-          default: true
-          description: Habilitar DNS hostnames na VPC, caso não seja indicado o padrão sera definido como true
-      dependencies:
-        enable_nat_gateway_prod:
-          oneOf:
-            - properties:
-              enable_nat_gateway_prod:
-                enum:
-                  - true
-              single_nat_gateway_prod:
-                type: boolean
-                title: NAT Gateway unico
-            - properties:
-              enable_nat_gateway_prod:
-                enum:
-                  - false
+    # - title: Parametros da infraestrutura de producao
+    #   required:
+    #     - bucket_name_prod
+    #     - key_path_prod
+    #     - cidr_prod
+    #     - private_subnets_prod
+    #     - public_subnets_prod
+    #   properties:
+    #     bucket_name_prod:
+    #       title: Nome do bucket
+    #       type: string
+    #       description: Nome do bucket que contem a chave de acesso
+    #     key_path_prod:
+    #       title: Caminho da chave
+    #       type: string
+    #       description: Caminho da chave de acesso dentro do bucket
+    #     cidr_prodcidr_prod:
+    #       title: CIDR
+    #       type: string
+    #       description: CIDR da VPC. Ex (10.133.0.0/16)
+    #     private_subnets_prod:
+    #       title: Lista das subnets privadas
+    #       type: array
+    #       description: Lista das subnets privadas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
+    #       items:
+    #         type: string
+    #     public_subnets_prod:
+    #       title: Lista das subnets publicas
+    #       type: array
+    #       description: Lista das subnets publicas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
+    #       items:
+    #         type: string
+    #     enable_nat_gateway_prod:
+    #       title: Habilitar NAT Gateway
+    #       type: boolean
+    #       default: true
+    #       description: Habilitar NAT Gateway na VCP, caso não seja indicado o padrão sera definido como true
+    #     single_nat_gateway_prod:
+    #       title: NAT Gateway unico
+    #       type: boolean
+    #       default: true
+    #       description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
+    #     enable_dns_hostnames_prod:
+    #       title: Habilitar DNS
+    #       type: boolean
+    #       default: true
+    #       description: Habilitar DNS hostnames na VPC, caso não seja indicado o padrão sera definido como true
+      # dependencies:
+      #   enable_nat_gateway_prod:
+      #     oneOf:
+      #       - properties:
+      #         enable_nat_gateway_prod:
+      #           enum:
+      #             - true
+      #         single_nat_gateway_prod:
+      #           type: boolean
+      #           title: NAT Gateway unico
+      #       - properties:
+      #         enable_nat_gateway_prod:
+      #           enum:
+      #             - false
 
     - title: Parametros da infraestrutura de qualidade
       required:
