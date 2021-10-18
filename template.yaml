@@ -83,20 +83,6 @@ spec:
           type: boolean
           default: true
           description: Habilitar DNS hostnames na VPC, caso não seja indicado o padrão sera definido como true
-      # dependencies:
-      #   enable_nat_gateway_prod:
-      #     oneOf:
-      #       - properties:
-      #         enable_nat_gateway_prod:
-      #           enum:
-      #             - true
-      #         single_nat_gateway_prod:
-      #           type: boolean
-      #           title: NAT Gateway unico
-      #       - properties:
-      #         enable_nat_gateway_prod:
-      #           enum:
-      #             - false
 
     - title: Parametros da infraestrutura de qualidade
       required:
@@ -168,7 +154,7 @@ spec:
         copyWithoutRender:
           - .gitlab/workflows/*
         values:
-          component_id: '{{ parameters.component_id }}'
+          region: '{{ parameters.region }}'
           project_name: '{{ parameters.project_name }}'
           bucket_name_prod: '{{ parameters.bucket_name_prod }}'
           key_path_prod: '{{ parameters.key_path_prod }}'
