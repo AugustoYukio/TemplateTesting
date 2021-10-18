@@ -1,0 +1,10 @@
+{
+  "password" : "ifood@",
+  "roles" : [ "superuser" ],
+  "full_name" : "Ifood Default User",
+  "email" : "ifood@example.com",
+  "enabled": true,
+  "metadata" : {
+    "intelligence" : 7
+  }
+}

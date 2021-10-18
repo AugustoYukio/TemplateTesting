@@ -1,0 +1,237 @@
+{
+  "id": "7da743e6-9acd-4d4c-8fc5-9cde81329250",
+  "name": "Teste Restaurante",
+  "resources": [
+    {
+      "type": "LOGO",
+      "fileName": "7da743e6-9acd-4d4c-8fc5-9cde81329250/201905090054_RLpW_i.jpg"
+    }
+  ],
+  "slug": "bujari-ac/teste-restaurante-serra",
+  "userRating": 0,
+  "priceRange": "CHEAPEST",
+  "mainCategory": {
+    "code": "BEB",
+    "description": "Bebidas",
+    "friendlyName": "Bebidas"
+  },
+  "features": [
+    "DELIVERY",
+    "CANCELABLE",
+    "CHAT_CONSUMER_ENABLED"
+  ],
+  "tags": [
+    "CD_ATIVO",
+    "JAN20::TAKEOUT_20MIN",
+    "GUIDED_HELP_TYPE",
+    "CRM_20200109_TOGO_TAG",
+    "CPGN_USER_DISCOUNT_BR_LIST",
+    "LONG_TAIL",
+    "WRAPPED_DEZ19",
+    "EXCLUSIVO",
+    "NEW"
+  ],
+  "paymentCodes": [
+    "DNR",
+    "MPAY",
+    "MOVPAY_MC",
+    "MC",
+    "GPY_ELO",
+    "ELOD",
+    "GPY_MCMA",
+    "BENRON",
+    "AM",
+    "MCMA",
+    "MOVPAY_AM",
+    "APL_ELOD",
+    "MOVPAY_VIS",
+    "GPY_ELOD",
+    "APL_MCMA",
+    "GPY_MC",
+    "APL_ELO",
+    "MOVPAY_HIPER",
+    "APL_VISE",
+    "HIPER",
+    "IFE",
+    "VIS",
+    "APL_VIS",
+    "MOVPAY_ELO",
+    "GPY_VISE",
+    "MOVPAY_DNR",
+    "VISE",
+    "ELO",
+    "APL_MC",
+    "GPY_VIS"
+  ],
+  "minimumOrderValue": 0,
+  "deliveryFee": {
+    "type": "FIXED",
+    "value": 0,
+    "originalValue": 0
+  },
+  "deliveryTime": 0,
+  "distance": 0.02,
+  "available": true,
+  "takeoutTime": 0,
+  "preparationTime": 0,
+  "deliveryMethods": [
+    {
+      "id": "DEFAULT",
+      "priority": 1,
+      "type": "FIXED",
+      "value": 0,
+      "originalValue": 0,
+      "title": "Padrão",
+      "subtitle": "O entregador leva até você agora",
+      "minTime": 35,
+      "maxTime": 45,
+      "mode": "DELIVERY",
+      "schedule": {
+        "now": true,
+        "shifts": [],
+        "timeSlots": []
+      },
+      "deliveredBy": "MERCHANT"
+    }
+  ],
+  "contextSetup": {
+    "context": "DEFAULT",
+    "regionGroup": "e1dbd9d8-45d6-4b33-aafc-417b8d69b06d",
+    "catalogGroup": "ffca0022-eb43-4205-9a1b-73a72f8e3f95"
+  },
+  "shortId": 252546,
+  "companyCode": "IFO",
+  "address": {
+    "district": "Serra",
+    "city": "BUJARI",
+    "state": "AC",
+    "country": "BR",
+    "latitude": -9.827597,
+    "longitude": -67.950856,
+    "timezone": "Etc/GMT+5",
+    "zipCode": "69926970",
+    "streetName": "Rua Irineu serra",
+    "streetNumber": "25"
+  },
+  "enabled": true,
+  "phoneIf": "38399398",
+  "merchantChain": {},
+  "groups": [
+    {
+      "id": "d107726d-f66f-4c25-bd82-edca0bbacbd2",
+      "type": "COMPANY",
+      "externalId": "IFO",
+      "name": "IFOOD"
+    },
+    {
+      "id": "56396d4b-50c9-40a3-b964-218eda18924b",
+      "type": "BUSINESS_MODEL",
+      "externalId": "MKT",
+      "name": "Marketplace"
+    },
+    {
+      "id": "2b69a2f0-6ac8-4eda-b4b2-9d9d5f578054",
+      "type": "STORE_TYPE",
+      "externalId": "RESTAURANT",
+      "name": "RESTAURANT"
+    }
+  ],
+  "shifts": [
+    {
+      "dayOfWeek": "SUNDAY",
+      "start": "00:00:00",
+      "duration": 1425
+    },
+    {
+      "dayOfWeek": "SATURDAY",
+      "start": "00:00:00",
+      "duration": 1425
+    },
+    {
+      "dayOfWeek": "FRIDAY",
+      "start": "00:00:00",
+      "duration": 1425
+    },
+    {
+      "dayOfWeek": "THURSDAY",
+      "start": "00:00:00",
+      "duration": 1425
+    },
+    {
+      "dayOfWeek": "WEDNESDAY",
+      "start": "00:00:00",
+      "duration": 1425
+    },
+    {
+      "dayOfWeek": "TUESDAY",
+      "start": "00:00:00",
+      "duration": 1425
+    },
+    {
+      "dayOfWeek": "MONDAY",
+      "start": "00:00:00",
+      "duration": 1425
+    }
+  ],
+  "categories": [],
+  "configs": {
+    "nationalIdentificationNumberRequired": true,
+    "orderNoteLength": 140,
+    "chargeDifferentToppingsMode": "GREATER"
+  },
+  "userRatingCount": 0,
+  "locale": "pt_BR",
+  "type": "RESTAURANT",
+  "documents": {
+    "CNPJ": {
+      "type": "CNPJ",
+      "value": "84303908000164"
+    }
+  },
+  "location": [
+    -67.950856,
+    -9.827597
+  ],
+  "menuDetailsKeywords": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "menuTypeKeywords": [
+    "Bebidas",
+    "Bebidas",
+    "Teste complemento",
+    "Teste complemento",
+    "Teste complemento",
+    "Pizza Salgada",
+    "Pizza Salgada",
+    "Pizza Salgada",
+    "Pizza Salgada",
+    "Pizza Salgada",
+    "Pizza Salgada",
+    "Pizza Salgada"
+  ],
+  "menuDescriptionKeywords": [
+    "Red Label",
+    "Teste 123",
+    "Ricardinho v2 com sifts",
+    "Teste 321",
+    "Teste complemento item",
+    "PEQUENA",
+    "PEQUENA 2 SABORES (1 PEDAÇOS)",
+    "MÉDIA",
+    "MÉDIA 2 SABORES (6 PEDAÇOS)",
+    "GRANDE",
+    "GRANDE 2 SABORES (8 PEDAÇOS)",
+    "GRANDE 3 SABORES (8 PEDAÇOS)"
+  ]
+}

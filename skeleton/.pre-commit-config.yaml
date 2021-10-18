@@ -1,0 +1,27 @@
+---
+repos:
+  - repo: git://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-byte-order-marker
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+  - repo: git://github.com/gruntwork-io/pre-commit
+    rev: v0.1.12
+    hooks:
+      - id: shellcheck
+        # User data templates have interpolation delimiters that must be ignored
+        exclude: userdata\.tpl$
+      - id: terragrunt-hclfmt
+  - repo: https://gitlab.com/devopshq/gitlab-ci-linter
+    rev: v1.0.2
+    hooks:
+      - id: gitlab-ci-linter
+        args:
+          - '--server'
+          - 'https://gitlab.inlabs.app'

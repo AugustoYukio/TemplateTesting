@@ -1,0 +1,12 @@
+.terraform
+*.terraform
+.terraform*
+
+qa/.terraform
+qa/.terraform*
+qa/tgw/.terraform
+qa/tgw/.terraform*
+pro/.terraform
+pro/.terraform*
+pro/tgw/.terraform
+pro/tgw/.terraform*

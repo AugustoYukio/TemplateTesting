@@ -1,0 +1,201 @@
+image: $INFRA_BASE_REGISTRY:latest
+
+.pre_environment:
+  before_script:
+    - rm -rf .terraform
+    - mkdir -p ~/.aws
+    - printf "%s" $IFOOD_LITE_SERVICEACCOUNT | base64 -d > ~/.aws/credentials
+  
+
+.qa_environment:
+  extends: .pre_environment
+  variables:
+    IFOOD_LITE_SERVICEACCOUNT: $IFOOD_LITE_SERVICEACCOUNT_QA
+  only:
+    - development
+
+.prod_environment:
+  extends: .pre_environment
+  variables:
+    IFOOD_LITE_SERVICEACCOUNT: $IFOOD_LITE_SERVICEACCOUNT_PROD
+  only:
+    - master
+
+stages:
+  # build of the container builder for faster playbook deployments
+  - build
+  # Infra
+  - validate
+  - plan
+  - apply
+  - destroy
+
+############################################################
+# Build stage
+
+build_stage:
+  stage: build
+  variables:
+    BUILD_CACHE_PATH: "$CI_PROJECT_DIR/.gitlab_cache"
+    BUILD_CONTEXT: "$CI_PROJECT_DIR/build"
+    BUILD_DOCKERFILE_PATH: "$CI_PROJECT_DIR/build/Dockerfile"
+    CONTAINER_IMAGE_NAME: "$CI_REGISTRY_IMAGE"
+    CONTAINER_IMAGE_TAG: "$CI_PIPELINE_IID"
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{
+        \"auths\":{
+          \"$CI_REGISTRY\":{
+            \"username\":\"$REGISTRY_USER\",
+            \"password\":\"$REGISTRY_TOKEN\"}}}" >
+        /kaniko/.docker/config.json
+    - echo "Building image $INFRA_BASE_REGISTRY:latest"
+    - /kaniko/executor
+        --cache-dir "$BUILD_CACHE_PATH"
+        --context $BUILD_CONTEXT
+        --dockerfile $BUILD_DOCKERFILE_PATH
+        --destination $INFRA_BASE_REGISTRY:latest
+  cache:
+    paths:
+      - $BUILD_CACHE_PATH
+  when: manual
+
+.checkov:
+  stage: validate
+  script:
+    - checkov -d ${IFOOD_LITE_ENV}/ -o json | tee report.json
+  allow_failure: true
+  artifacts:
+    paths:
+      - "report.json"
+
+.tfsec:
+  stage: validate
+  image: tfsec/tfsec-ci
+  script:
+    - tfsec --out tfsec.json --format json --force-all-dirs ${IFOOD_LITE_ENV:-.}
+  allow_failure: true
+  artifacts:
+    paths:
+      - "tfsec.json"
+
+############### QA STAGES ###############
+
+checkov-qa:
+  extends:
+    - .qa_environment
+    - .checkov
+  variables:
+    IFOOD_LITE_ENV: qa
+
+tfsec-qa:
+  extends:
+    - .qa_environment
+    - .tfsec
+  variables:
+    IFOOD_LITE_ENV: qa
+
+validate-qa:
+  extends: .qa_environment
+  stage: validate
+  script:
+    - cd qa
+    - terraform init
+    - terraform validate
+
+plan-qa:
+  extends: .qa_environment
+  stage: plan
+  script:
+    - cd qa
+    - terraform init
+    - terraform plan -out "planfile"
+  dependencies:
+    - validate-qa
+  artifacts:
+    paths:
+      - "qa/planfile"
+
+apply-qa:
+  extends: .qa_environment
+  stage: apply
+  script:
+    - cd qa
+    - terraform init
+    - terraform apply -input=false "planfile"
+  dependencies:
+    - plan-qa
+  when: manual
+
+
+############### PROD STAGES ###############
+
+checkov-prod:
+  extends:
+    - .prod_environment
+    - .checkov
+  variables:
+    IFOOD_LITE_ENV: prod
+
+tfsec-prod:
+  extends:
+    - .prod_environment
+    - .tfsec
+  variables:
+    IFOOD_LITE_ENV: prod
+
+validate-prod:
+  extends: .prod_environment
+  stage: validate
+  script:
+    - cd prod
+    - terraform init
+    - terraform validate
+
+plan-prod:
+  extends: .prod_environment
+  stage: plan
+  script:
+    - cd prod
+    - terraform init
+    - terraform plan -out "planfile"
+    - ls -la
+  dependencies:
+    - validate-prod
+  artifacts:
+    paths:
+      - "prod/planfile"
+
+apply-prod:
+  extends: .prod_environment
+  stage: apply
+  script:
+    - cd prod
+    - terraform init
+    - terraform apply -input=false "planfile"
+  dependencies:
+    - plan-prod
+  when: manual
+
+############### DESTROY STAGES ###############
+
+destroy-qa:
+  extends: .qa_environment
+  stage: destroy
+  script:
+    - cd qa
+    - terraform init
+    - terraform destroy -auto-approve
+  when: manual
+
+destroy-prod:
+  extends: .prod_environment
+  stage: destroy
+  script:
+    - cd prod
+    - terraform init
+    - terraform destroy -auto-approve
+  when: manual
