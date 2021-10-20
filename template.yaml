@@ -150,7 +150,6 @@ spec:
           ui:field: RepoUrlPicker
           ui:options:
             allowedHosts:
-              - github.com
               - gitlab.inlabs.app
 
   steps:
@@ -183,11 +182,11 @@ spec:
 
     - id: publish
       name: Publish
-      action: publish:github
+      action: publish:gitlab
       input:
-        allowedHosts: ["github.com"]
-        description: "This is {{ parameters.component_id }}"
-        repoUrl: "{{ parameters.repoUrl }}"
+        allowedHosts: ['gitlab.inlabs.app']
+        description: 'This is {{ parameters.project_name }}'
+        repoUrl: '{{ parameters.repoUrl }}'
 
     - id: register
       name: Register
