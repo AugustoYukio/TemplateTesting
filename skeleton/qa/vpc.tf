@@ -11,9 +11,9 @@ module "vpc" {
   version = "3.10.0"
 
   name = "${local.vpc_name}"
-  cidr = ${{values.cidr_qa}}
+  cidr = "${{values.cidr_qa}}"
   azs  = data.aws_availability_zones.available.names
-  // each subnet supports 2k hosts
+
   private_subnets      = [${{values.private_subnets_qa}}]
   public_subnets       = [${{values.public_subnets_qa}}]
   enable_nat_gateway   = ${{values.enable_nat_gateway_qa}}

@@ -4,27 +4,25 @@ image: $INFRA_BASE_REGISTRY:latest
   before_script:
     - rm -rf .terraform
     - mkdir -p ~/.aws
-    - printf "%s" $IFOOD_LITE_SERVICEACCOUNT | base64 -d > ~/.aws/credentials
+    - printf "%s" $${{values.project_name | upper | replace(" ", "_") }}_SERVICEACCOUNT | base64 -d > ~/.aws/credentials
   
 
 .qa_environment:
   extends: .pre_environment
   variables:
-    IFOOD_LITE_SERVICEACCOUNT: $IFOOD_LITE_SERVICEACCOUNT_QA
+    ${{values.project_name | upper | replace(" ", "_") }}_SERVICEACCOUNT: $${{values.project_name | upper | replace(" ", "_") }}_SERVICEACCOUNT_QA
   only:
     - development
 
 .prod_environment:
   extends: .pre_environment
   variables:
-    IFOOD_LITE_SERVICEACCOUNT: $IFOOD_LITE_SERVICEACCOUNT_PROD
+    ${{values.project_name | upper | replace(" ", "_") }}_SERVICEACCOUNT: $${{values.project_name | upper | replace(" ", "_") }}_SERVICEACCOUNT_PROD
   only:
     - master
 
 stages:
-  # build of the container builder for faster playbook deployments
   - build
-  # Infra
   - validate
   - plan
   - apply
@@ -66,7 +64,7 @@ build_stage:
 .checkov:
   stage: validate
   script:
-    - checkov -d ${IFOOD_LITE_ENV}/ -o json | tee report.json
+    - checkov -d ${${{values.project_name | upper | replace(" ", "_") }}_ENV}/ -o json | tee report.json
   allow_failure: true
   artifacts:
     paths:
@@ -76,7 +74,7 @@ build_stage:
   stage: validate
   image: tfsec/tfsec-ci
   script:
-    - tfsec --out tfsec.json --format json --force-all-dirs ${IFOOD_LITE_ENV:-.}
+    - tfsec --out tfsec.json --format json --force-all-dirs ${${{values.project_name | upper | replace(" ", "_") }}_ENV:-.}
   allow_failure: true
   artifacts:
     paths:
@@ -89,14 +87,14 @@ checkov-qa:
     - .qa_environment
     - .checkov
   variables:
-    IFOOD_LITE_ENV: qa
+    ${{values.project_name | upper | replace(" ", "_") }}_ENV: qa
 
 tfsec-qa:
   extends:
     - .qa_environment
     - .tfsec
   variables:
-    IFOOD_LITE_ENV: qa
+    ${{values.project_name | upper | replace(" ", "_") }}_ENV: qa
 
 validate-qa:
   extends: .qa_environment
@@ -138,14 +136,14 @@ checkov-prod:
     - .prod_environment
     - .checkov
   variables:
-    IFOOD_LITE_ENV: prod
+    ${{values.project_name | upper | replace(" ", "_") }}_ENV: prod
 
 tfsec-prod:
   extends:
     - .prod_environment
     - .tfsec
   variables:
-    IFOOD_LITE_ENV: prod
+    ${{values.project_name | upper | replace(" ", "_") }}_ENV: prod
 
 validate-prod:
   extends: .prod_environment

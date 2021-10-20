@@ -6,9 +6,9 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = ${{values.bucket_name_qa}}
-    key    = ${{values.key_path_qa}}
-    region = ${{values.region}}
+    bucket = "${{values.bucket_name_qa}}"
+    key    = "${{values.key_path_qa}}"
+    region = "${{values.region}}"
     shared_credentials_file = "~/.aws/credentials"
     profile = "default"
   }
@@ -17,7 +17,7 @@ terraform {
 # Configure the AWS Provider
 provider "aws" {
   version = "~> 3.0"
-  region  = ${{values.region}}
+  region  = "${{values.region}}"
   shared_credentials_file = "~/.aws/credentials"
   profile = "default"
 }
