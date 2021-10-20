@@ -21,7 +21,7 @@ Inclue itens como:
         - Region para a AWS
 
     - ${{values.project_name | upper | replace(" ", "_") }}_SERVICEACCOUNT_PROD
-        - - Profile da conta de produção (${{values.project_name | lower | replace(" ", "-") }}-production - 849197578363)
+        - Profile da conta de produção (${{values.project_name | lower | replace(" ", "-") }}-production - 849197578363)
 
     - ${{values.project_name | upper | replace(" ", "_") }}_SERVICEACCOUNT_QA
         - Profile da conta de sandbox (${{values.project_name | lower | replace(" ", "-") }}-sandbox - 774504999002)
