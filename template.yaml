@@ -12,133 +12,55 @@ spec:
   type: infra
 
   parameters:
-    - title: Parametros gerais da infraestrutura
+    - title: Preencha o nome da entidade
+      type: object
       required:
-        - project_name
-        - region
-        - owner
+        - entity_name
       properties:
-        project_name:
-          title: Nome do projeto
+        entity_name:
+          title: Entity Name
           type: string
-          ui:autofocus: true
-          description: Nome do projeto
-        region:
-          title: Regiao
-          type: string
-          default: "us-east-1"
-          enum: ["us-east-2","us-east-1","us-west-1","us-west-2","af-south-1","ap-east-1","ap-south-1","ap-northeast-3","ap-northeast-2","ap-southeast-1","ap-southeast-2","ap-northeast-1","ca-central-1","eu-central-1","eu-west-1","eu-west-2","eu-south-1","eu-west-3","eu-north-1","me-south-1","sa-east-1"]
-          description: Regiao da AWS que serao criados os recursos de infra. Ex (us-east-1)
-        owner:
-          title: Dono
-          type: string
-          description: Dono do componente
-          ui:field: OwnerPicker
-          ui:options:
-            allowedKinds:
-              - Group
-
-    - title: Parametros da infraestrutura de producao
-      required:
-        - bucket_name_prod
-        - key_path_prod
-        - cidr_prod
-        - private_subnets_prod
-        - public_subnets_prod
-      properties:
-        bucket_name_prod:
-          title: Nome do bucket
-          type: string
-          ui:autofocus: true
-          description: Nome do bucket que contem a chave de acesso
-        key_path_prod:
-          title: Caminho da chave
-          type: string
-          description: Caminho da chave de acesso dentro do bucket
-        cidr_prod:
-          title: CIDR
-          type: string
-          description: CIDR da VPC. Ex (10.133.0.0/16)
-        private_subnets_prod:
-          title: Lista das subnets privadas
+          description: Unique name of the entity
+        entity:
+          title: Campo
           type: array
-          description: Lista das subnets privadas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
           items:
-            type: string
-            title: Subnet privada
-        public_subnets_prod:
-          title: Lista das subnets publicas
-          type: array
-          description: Lista das subnets publicas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
-          items:
-            title: Subnet publica
-            type: string
-        enable_nat_gateway_prod:
-          title: Habilitar NAT Gateway
-          type: boolean
-          default: true
-          description: Habilitar NAT Gateway na VCP, caso não seja indicado o padrão sera definido como true
-        single_nat_gateway_prod:
-          title: NAT Gateway unico
-          type: boolean
-          default: true
-          description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
-        enable_dns_hostnames_prod:
-          title: Habilitar DNS
-          type: boolean
-          default: true
-          description: Habilitar DNS hostnames na VPC, caso não seja indicado o padrão sera definido como true
-
-    - title: Parametros da infraestrutura de qualidade
-      required:
-        - bucket_name_qa
-        - key_path_qa
-        - cidr_qa
-        - private_subnets_qa
-        - public_subnets_qa
-      properties:
-        bucket_name_qa:
-          title: Nome do bucket
-          type: string
-          ui:autofocus: true
-          description: Nome do bucket que contem a chave de acesso
-        key_path_qa:
-          title: Caminho da chave
-          type: string
-          description: Caminho da chave de acesso dentro do bucket
-        cidr_qa:
-          title: CIDR
-          type: string
-          description: CIDR da VPC. Ex (10.133.0.0/16)
-        private_subnets_qa:
-          title: Lista das subnets privadas
-          type: array
-          description: Lista das subnets privadas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
-          items:
-            title: Subnet privada
-            type: string
-        public_subnets_qa:
-          title: Lista das subnets publicas
-          type: array
-          description: Lista das subnets publicas, cada item corresponde a uma subnet. Ex (1° item - "10.133.0.0/20", 2°item - "10.133.16.0/20", 3°item - "10.133.32.0/20"])
-          items:
-            title: Subnet publica
-            type: string
-        enable_nat_gateway_qa:
-          title: Habilitar NAT Gateway
-          type: boolean
-          default: true
-          description: Habilitar NAT Gateway na VCP, caso não seja indicado o padrão sera definido como true
-        single_nat_gateway_qa:
-          title: NAT Gateway unico
-          type: boolean
-          default: true
-          description: Habilitar NAT Gateway unico na VPC, caso não seja indicado o padrão sera definido como true
-        enable_dns_hostnames_qa:
-          title: Habilitar DNS
-          type: boolean
-          default: true
-          description: Habilitar DNS hostnames na VPC, caso não seja indicado o padrão sera definido como true
+            type: object
+            required:
+              - prop_name
+            properties:
+              prop_name:
+                type: string
+                title: Campo
+                description: Nome do campo da entidade
+              prop_type:
+                type: string
+                title: Tipo
+                description: Selecione um tipo para o campo
+                enum:
+                  - String
+                  - Integer
+                  - Float
+                  - Boolean
+            dependencies:
+              prop_type:
+                oneOf:
+                  - properties:
+                      prop_type:
+                        enum:
+                          - Integer
+                          - Boolean
+                  - properties:
+                      prop_type:
+                        enum:
+                          - String
+                          - Float
+                      prop_size:
+                        type: string
+                        title: Tamanho
+                        description: Tamanho do campo da entidade
+                    required:
+                      - prop_size
           
     - title: Escolher repositorio
       required:
@@ -161,24 +83,110 @@ spec:
         copyWithoutRender:
           - .gitlab/workflows/*
         values:
-          region: '{{ parameters.region }}'
-          project_name: '{{ parameters.project_name }}'
-          bucket_name_prod: '{{ parameters.bucket_name_prod }}'
-          key_path_prod: '{{ parameters.key_path_prod }}'
-          cidr_prod: '{{ parameters.cidr_prod }}'
-          private_subnets_prod: '{{ parameters.private_subnets_prod }}'
-          public_subnets_prod: '{{ parameters.public_subnets_prod }}'
-          enable_nat_gateway_prod: '{{ parameters.enable_nat_gateway_prod }}'
-          single_nat_gateway_prod: '{{ parameters.single_nat_gateway_prod }}'
-          enable_dns_hostnames_prod: '{{ parameters.enable_dns_hostnames_prod }}'
-          bucket_name_qa: '{{ parameters.bucket_name_qa }}'
-          key_path_qa: '{{ parameters.key_path_qa }}'
-          cidr_qa: '{{ parameters.cidr_qa }}'
-          private_subnets_qa: '{{ parameters.private_subnets_qa }}'
-          public_subnets_qa: '{{ parameters.public_subnets_qa }}'
-          enable_nat_gateway_qa: '{{ parameters.enable_nat_gateway_qa }}'
-          single_nat_gateway_qa: '{{ parameters.single_nat_gateway_qa }}'
-          enable_dns_hostnames_qa: '{{ parameters.enable_dns_hostnames_qa }}'
+
+    - id: publish
+      name: Publish
+      action: publish:gitlab
+      input:
+        allowedHosts: ['gitlab.inlabs.app']
+        description: 'This is {{ parameters.project_name }}'
+        repoUrl: '{{ parameters.repoUrl }}'
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: '{{ steps.publish.output.repoContentsUrl }}'
+        catalogInfoPath: '/catalog-info.yaml'
+
+  output:
+    remoteUrl: '{{ steps.publish.output.remoteUrl }}'
+    entityRef: '{{ steps.register.output.entityRef }}'
+apiVersion: backstage.io/v1beta2
+kind: Template
+metadata:
+  name: infra-base-template
+  title: Template base de infraestrutura
+  description: Criar infraestrutura base
+  tags:
+    - recommended
+    - terraform
+spec:
+  owner: web@example.com
+  type: infra
+
+  parameters:
+    - title: Preencha o nome da entidade
+      type: object
+      required:
+        - entity_name
+      properties:
+        entity_name:
+          title: Entity Name
+          type: string
+          description: Unique name of the entity
+        entity:
+          title: Campo
+          type: array
+          items:
+            type: object
+            required:
+              - prop_name
+            properties:
+              prop_name:
+                type: string
+                title: Campo
+                description: Nome do campo da entidade
+              prop_type:
+                type: string
+                title: Tipo
+                description: Selecione um tipo para o campo
+                enum:
+                  - String
+                  - Integer
+                  - Float
+                  - Boolean
+            dependencies:
+              prop_type:
+                oneOf:
+                  - properties:
+                      prop_type:
+                        enum:
+                          - Integer
+                          - Boolean
+                  - properties:
+                      prop_type:
+                        enum:
+                          - String
+                          - Float
+                      prop_size:
+                        type: string
+                        title: Tamanho
+                        description: Tamanho do campo da entidade
+                    required:
+                      - prop_size
+          
+    - title: Escolher repositorio
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repositorio
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - gitlab.inlabs.app
+
+  steps:
+    - id: template
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        copyWithoutRender:
+          - .gitlab/workflows/*
+        values:
 
     - id: publish
       name: Publish
