@@ -18,8 +18,13 @@ spec:
         teste:
           type: string
           pattern: ^[0-9]
+          message:
+            pattern: "Error"
         teste2:
           type: string
+          pattern: ^[0-9]
+          message:
+            pattern: "Errorfasd"
           
     - title: Escolher repositorio
       required:
