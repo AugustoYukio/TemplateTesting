@@ -14,17 +14,15 @@ spec:
   parameters:
     - title: Preencha o nome da entidade
       type: object
-      required:
-        -teste
       properties:
         teste:
           type: string
-          pattern: "[0-9]"
+          pattern: [0-9]
           message:
             required: "tessdfsfe"
         teste2:
           type: string
-          pattern: "[0-9]"
+          pattern: [0-9]
           message:
             pattern: "Error"
           
