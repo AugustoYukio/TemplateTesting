@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Teste
+metadata:
+  name: teste
+  description: teste
+  links:
+    - url: http://www.acme.com/
+      title: Website
+    - url: https://meta.wikimedia.org/wiki/
+      title: Intranet
