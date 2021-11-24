@@ -17,7 +17,7 @@ spec:
       properties:
         teste:
           type: string
-          pattern: [0-9]
+          pattern: "^[0-9]"
         teste2:
           type: string
           
