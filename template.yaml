@@ -20,11 +20,20 @@ spec:
           pattern: ^[0-9]
           message:
             pattern: "Error"
-        teste2:
+        clustername:
+          title: ClusterName
           type: string
-          pattern: ^[0-9]
-          message:
-            pattern: "Errorfasd"
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - clustername
+        teste:
+          title: teste
+          type: string
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - teste       
           
     - title: Escolher repositorio
       required:
