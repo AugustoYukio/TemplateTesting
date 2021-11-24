@@ -15,52 +15,15 @@ spec:
     - title: Preencha o nome da entidade
       type: object
       required:
-        - entity_name
+        -teste
       properties:
-        entity_name:
-          title: Entity Name
+        teste:
           type: string
-          description: Unique name of the entity
-        entity:
-          title: Campo
-          type: array
-          items:
-            type: object
-            required:
-              - prop_name
-            properties:
-              prop_name:
-                type: string
-                title: Campo
-                description: Nome do campo da entidade
-              prop_type:
-                type: string
-                title: Tipo
-                description: Selecione um tipo para o campo
-                enum:
-                  - String
-                  - Integer
-                  - Float
-                  - Boolean
-            dependencies:
-              prop_type:
-                oneOf:
-                  - properties:
-                      prop_type:
-                        enum:
-                          - Integer
-                          - Boolean
-                  - properties:
-                      prop_type:
-                        enum:
-                          - String
-                          - Float
-                      prop_size:
-                        type: string
-                        title: Tamanho
-                        description: Tamanho do campo da entidade
-                    required:
-                      - prop_size
+          pattern: [0-9]
+        teste2:
+          type: string
+          message:
+            pattern: Error
           
     - title: Escolher repositorio
       required:
