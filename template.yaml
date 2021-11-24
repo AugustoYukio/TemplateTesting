@@ -19,12 +19,12 @@ spec:
       properties:
         teste:
           type: string
-          pattern: [0-9]
+          pattern: "[0-9]"
         teste2:
           type: string
-          pattern: [0-9]
+          pattern: "[0-9]"
           message:
-            pattern: Error
+            pattern: "Error"
           
     - title: Escolher repositorio
       required:
