@@ -27,13 +27,6 @@ spec:
           ui:options:
             allowedKinds:
               - clustername
-        teste:
-          title: teste
-          type: string
-          ui:field: OwnerPicker
-          ui:options:
-            allowedKinds:
-              - Teste       
           
     - title: Escolher repositorio
       required:
