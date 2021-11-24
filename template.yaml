@@ -17,14 +17,8 @@ spec:
       properties:
         teste:
           type: string
-          pattern: [0-9]
-          message:
-            required: "tessdfsfe"
         teste2:
           type: string
-          pattern: [0-9]
-          message:
-            pattern: "Error"
           
     - title: Escolher repositorio
       required:
