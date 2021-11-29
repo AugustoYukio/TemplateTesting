@@ -17,9 +17,12 @@ spec:
       properties:
         teste:
           type: string
-          pattern: [^\s-]
-          message:
-            pattern: "Error"
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+              - cluster
     - title: Escolher repositorio
       required:
         - repoUrl
