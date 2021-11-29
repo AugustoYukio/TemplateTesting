@@ -21,8 +21,8 @@ spec:
           ui:field: OwnerPicker
           ui:options:
             allowedKinds:
-              - Group
               - cluster
+              - Cluster
     - title: Escolher repositorio
       required:
         - repoUrl
