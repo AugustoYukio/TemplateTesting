@@ -15,14 +15,11 @@ spec:
     - title: Preencha o nome da entidade
       type: object
       properties:
-        teste:
+        name:
+          title: Name
           type: string
-          description: Owner of the component
-          ui:field: OwnerPicker
-          ui:options:
-            allowedKinds:
-              - plugin
-              - cluster
+          description: My custom name for the component
+          ui:field: MyCustomExtension
     - title: Escolher repositorio
       required:
         - repoUrl
