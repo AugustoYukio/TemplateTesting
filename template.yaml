@@ -1,31 +1,193 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
+  annotations:
+    inmetrics/category: infra
+    inmetrics/provider: aws
+    inmetrics/iac: terraform
+    inmetrics/scm: gitlab
   name: infra-eks-template
   title: Template de Infraestrutura Eks
   description: Criar infraestrutura Eks
   tags:
     - recommended
     - terraform
-  type: infra
-
 spec:
   owner: web@example.com
   type: infra
+
   parameters:
     - title: Parametros gerais da infraestrutura
       required:
         - project_name
+        - description
+        - owner
       properties:
         project_name:
           title: Nome do projeto
           type: string
           description: Nome do projeto
-          ui:field: AWSAccountsExtension
+          ui:autofocus: true
+          ui:field: AWSAccountsExtensionv
+        description:
+          title: Descrição
+          type: string
+          description: Descrição do projeto.
+        owner:
+          title: Dono
+          type: string
+          description: Dono do componente
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+
+    - title: Parametros gerais AWS
+      required:
+        - aws_credentials
+        - aws_region
+        - registry_url
+        - domain
+      properties:
+        aws_credentials:
+          title: Credenciais AWS
+          type: string
+          description: Credenciais AWS no formato para o arquivo ~/.aws.credentials
+          ui:widget: password
+        aws_region:
+          title: Região 
+          type: string
+          default: "us-east-1"
+          enum: ["us-east-2","us-east-1","us-west-1","us-west-2","af-south-1","ap-east-1","ap-south-1","ap-northeast-3","ap-northeast-2","ap-southeast-1","ap-southeast-2","ap-northeast-1","ca-central-1","eu-central-1","eu-west-1","eu-west-2","eu-south-1","eu-west-3","eu-north-1","me-south-1","sa-east-1"]
+          description: Região da AWS onde será hospedado o Bucket. Ex (us-east-1). 
+        registry_url:
+          title: Container Registry URL
+          type: string
+          description: Container Registry URL
+        domain:
+          title: Dominio
+          type: string
+          description: Dominio que será criada a Hosted Zone        
+
+    - title: Criando VPC
+      required:
+        - vpc_name
+        - cidr_vpc
+        - private_subnets
+        - public_subnets
+      properties:
+        vpc_name:
+          title: Nome do VPC
+          type: string
+          description: Nome do VPC
+          ui:autofocus: true
+        cidr_vpc:
+          title: CIDR
+          type: string
+          default: '10.133.0.0/16'
+          description: CIDR da VPC. Ex (10.133.0.0/16)
+          pattern: ^([0-9]{1,3}[.]){3}[0-9]{1,3}[/][0-9]{2}$
+        private_subnets:
+          title: Lista das subnets privadas
+          type: array
+          description: Lista das subnets privadas. Ex - 10.133.0.0/20
+          items:
+            title: Subnet privada
+            type: string
+            default: '10.133.0.0/20'
+            pattern: ^([0-9]{1,3}[.]){3}[0-9]{1,3}[/][0-9]{2}$
+        public_subnets:
+          title: Lista das subnets publicas
+          type: array
+          description: Lista das subnets publicas. Ex - 10.133.0.0/20
+          items:
+            title: Subnet privada
+            default: '10.133.0.0/20'
+            type: string
+            pattern: ^([0-9]{1,3}[.]){3}[0-9]{1,3}[/][0-9]{2}$
+
+    - title: Criando Security Groups 
+      required:
+        - name_prefix_one
+        - from_port_one
+        - to_port_one
+        - cidr_security_group_one
+        - name_prefix_two
+        - from_port_two
+        - to_port_two
+        - cidr_security_group_two
+      properties:
+        name_prefix_one:
+          title: Nome do Security Group 1
+          type: string
+          description: Definir nome do 1º security group
+          ui:autofocus: true
+        from_port_one:
+          title: From Port
+          type: integer
+          description: Definir o from port do security group 1
+        to_port_one:
+          title: To Port
+          type: integer
+          description: Definir o to port do security group 1
+        cidr_security_group_one:
+          title: CIDR
+          type: string
+          default: '10.133.0.0/16'
+          description: CIDR do Security Group 1. Ex (10.133.0.0/16)
+          pattern: ^([0-9]{1,3}[.]){3}[0-9]{1,3}[/][0-9]{2}$
+        name_prefix_two:
+          title: Nome do Security Group 2
+          type: string
+          description: Definir nome do 2º security group
+        from_port_two:
+          title: From Port
+          type: integer
+          description: Definir o from port do security group 2
+        to_port_two:
+          title: To Port
+          type: integer
+          description: Definir o to port do security group 2
+        cidr_security_group_two:
+          title: CIDR
+          type: string
+          default: '10.133.0.0/16'
+          description: CIDR do Security Group 1. Ex (10.133.0.0/16)
+          pattern: ^([0-9]{1,3}[.]){3}[0-9]{1,3}[/][0-9]{2}$
+
+    - title: Worker Groups
+      required:
+        - groups_name
+        - instance_type
+        - groups_name_2
+        - instance_type_2
+      properties:
+        groups_name:
+          title: Nome do Grupo 1
+          type: string
+          description: Nome do Grupo 1
+          ui:autofocus: true
+        instance_type:
+          title: Instancia
+          type: string
+          description: Tipo de instancia AWS. Ex (t3.small)
+        groups_name_2:
+          title: Nome do Grupo 2 
+          type: string
+          description: Nome do Grupo 2
+        instance_type_2:
+          title: Instancia
+          type: string
+          description: Tipo de instancia AWS. Ex (t3.small)
 
     - title: Escolher repositorio
       required:
         - repoUrl
+      properties:
+        repoUrl:
+          title: Repositorio
+          type: string
+          ui:field: RepoUrlPicker
           ui:options:
             allowedHosts:
               - gitlab.inlabs.app
@@ -38,10 +200,38 @@ spec:
 
   steps:
     - id: template
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./skeleton
         copyWithoutRender:
           - .gitlab/workflows/*
         values:
+          component_id: '${{ parameters.component_id }}'
           project_name: '${{ parameters.project_name }}'
+          description: '${{ parameters.description }}'
+          aws_credentials: '${{ parameters.aws_credentials }}'
+          registry_url: '${{ parameters.registry_url }}'
+          domain: '${{ parameters.domain }}'
+          destination: '${{ parameters.repoUrl | parseRepoUrl }}'
+          owner: '${{ parameters.owner }}'
+          aws_region: '${{ parameters.aws_region }}'
+          vpc_name: '${{ parameters.vpc_name }}'
+          cidr_vpc: '${{ parameters.cidr_vpc }}'
+          private_subnets: '${{#with parameters}} ${{#each private_subnets}}"${{this}}",${{/each}}${{/with}}'
+          public_subnets: '${{#with parameters}} ${{#each public_subnets}}"${{this}}",${{/each}}${{/with}}'
+          name_prefix_one: '${{ parameters.name_prefix_one }}'
+          from_port_one: '${{ parameters.from_port_one }}'
+          to_port_one: '${{ parameters.to_port_one }}'
+          cidr_security_group_one: '${{ parameters.cidr_security_group_one }}'
+          name_prefix_two: '${{ parameters.name_prefix_two }}'
+          from_port_two: '${{ parameters.from_port_two }}'
+          to_port_two: '${{ parameters.to_port_two }}'
+          cidr_security_group_two: '${{ parameters.cidr_security_group_two }}'
+          groups_name: '${{ parameters.groups_name }}'
+          instance_type: '${{ parameters.instance_type }}'
+          groups_name_2: '${{ parameters.groups_name_2 }}'
+          instance_type_2: '${{ parameters.instance_type_2 }}'
 
 
     - id: publish
@@ -66,3 +256,261 @@ spec:
     - title: Open in catalog
       icon: catalog
       entityRef: ${{ steps.register.output.entityRef }}
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  annotations:
+    inmetrics/category: infra
+    inmetrics/provider: aws
+    inmetrics/iac: terraform
+    inmetrics/scm: gitlab
+  name: infra-eks-template
+  title: Template de Infraestrutura Eks
+  description: Criar infraestrutura Eks
+  tags:
+    - recommended
+    - terraform
+spec:
+  owner: web@example.com
+  type: infra
+
+  parameters:
+    - title: Parametros gerais da infraestrutura
+      required:
+        - project_name
+        - description
+        - owner
+      properties:
+        project_name:
+          title: Nome do projeto
+          type: string
+          description: Nome do projeto
+          ui:autofocus: true
+        description:
+          title: Descrição
+          type: string
+          description: Descrição do projeto.
+        owner:
+          title: Dono
+          type: string
+          description: Dono do componente
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+
+    - title: Parametros gerais AWS
+      required:
+        - aws_credentials
+        - aws_region
+        - registry_url
+        - domain
+      properties:
+        aws_credentials:
+          title: Credenciais AWS
+          type: string
+          description: Credenciais AWS no formato para o arquivo ~/.aws.credentials
+          ui:widget: password
+        aws_region:
+          title: Região 
+          type: string
+          default: "us-east-1"
+          enum: ["us-east-2","us-east-1","us-west-1","us-west-2","af-south-1","ap-east-1","ap-south-1","ap-northeast-3","ap-northeast-2","ap-southeast-1","ap-southeast-2","ap-northeast-1","ca-central-1","eu-central-1","eu-west-1","eu-west-2","eu-south-1","eu-west-3","eu-north-1","me-south-1","sa-east-1"]
+          description: Região da AWS onde será hospedado o Bucket. Ex (us-east-1). 
+        registry_url:
+          title: Container Registry URL
+          type: string
+          description: Container Registry URL
+        domain:
+          title: Dominio
+          type: string
+          description: Dominio que será criada a Hosted Zone        
+
+    - title: Criando VPC
+      required:
+        - vpc_name
+        - cidr_vpc
+        - private_subnets
+        - public_subnets
+      properties:
+        vpc_name:
+          title: Nome do VPC
+          type: string
+          description: Nome do VPC
+          ui:autofocus: true
+        cidr_vpc:
+          title: CIDR
+          type: string
+          default: '10.133.0.0/16'
+          description: CIDR da VPC. Ex (10.133.0.0/16)
+          pattern: ^([0-9]{1,3}[.]){3}[0-9]{1,3}[/][0-9]{2}$
+        private_subnets:
+          title: Lista das subnets privadas
+          type: array
+          description: Lista das subnets privadas. Ex - 10.133.0.0/20
+          items:
+            title: Subnet privada
+            type: string
+            default: '10.133.0.0/20'
+            pattern: ^([0-9]{1,3}[.]){3}[0-9]{1,3}[/][0-9]{2}$
+        public_subnets:
+          title: Lista das subnets publicas
+          type: array
+          description: Lista das subnets publicas. Ex - 10.133.0.0/20
+          items:
+            title: Subnet privada
+            default: '10.133.0.0/20'
+            type: string
+            pattern: ^([0-9]{1,3}[.]){3}[0-9]{1,3}[/][0-9]{2}$
+
+    - title: Criando Security Groups 
+      required:
+        - name_prefix_one
+        - from_port_one
+        - to_port_one
+        - cidr_security_group_one
+        - name_prefix_two
+        - from_port_two
+        - to_port_two
+        - cidr_security_group_two
+      properties:
+        name_prefix_one:
+          title: Nome do Security Group 1
+          type: string
+          description: Definir nome do 1º security group
+          ui:autofocus: true
+        from_port_one:
+          title: From Port
+          type: integer
+          description: Definir o from port do security group 1
+        to_port_one:
+          title: To Port
+          type: integer
+          description: Definir o to port do security group 1
+        cidr_security_group_one:
+          title: CIDR
+          type: string
+          default: '10.133.0.0/16'
+          description: CIDR do Security Group 1. Ex (10.133.0.0/16)
+          pattern: ^([0-9]{1,3}[.]){3}[0-9]{1,3}[/][0-9]{2}$
+        name_prefix_two:
+          title: Nome do Security Group 2
+          type: string
+          description: Definir nome do 2º security group
+        from_port_two:
+          title: From Port
+          type: integer
+          description: Definir o from port do security group 2
+        to_port_two:
+          title: To Port
+          type: integer
+          description: Definir o to port do security group 2
+        cidr_security_group_two:
+          title: CIDR
+          type: string
+          default: '10.133.0.0/16'
+          description: CIDR do Security Group 1. Ex (10.133.0.0/16)
+          pattern: ^([0-9]{1,3}[.]){3}[0-9]{1,3}[/][0-9]{2}$
+
+    - title: Worker Groups
+      required:
+        - groups_name
+        - instance_type
+        - groups_name_2
+        - instance_type_2
+      properties:
+        groups_name:
+          title: Nome do Grupo 1
+          type: string
+          description: Nome do Grupo 1
+          ui:autofocus: true
+        instance_type:
+          title: Instancia
+          type: string
+          description: Tipo de instancia AWS. Ex (t3.small)
+        groups_name_2:
+          title: Nome do Grupo 2 
+          type: string
+          description: Nome do Grupo 2
+        instance_type_2:
+          title: Instancia
+          type: string
+          description: Tipo de instancia AWS. Ex (t3.small)
+
+    - title: Escolher repositorio
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repositorio
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - gitlab.inlabs.app
+        branch:
+          title: Branch
+          type: string
+          enum: ['master', 'development']
+          default: 'master'
+          description: 'Branch onde o projeto será comitado'
+
+  steps:
+    - id: template
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        copyWithoutRender:
+          - .gitlab/workflows/*
+        values:
+          component_id: '${{ parameters.component_id }}'
+          project_name: '${{ parameters.project_name }}'
+          description: '${{ parameters.description }}'
+          aws_credentials: '${{ parameters.aws_credentials }}'
+          registry_url: '${{ parameters.registry_url }}'
+          domain: '${{ parameters.domain }}'
+          destination: '${{ parameters.repoUrl | parseRepoUrl }}'
+          owner: '${{ parameters.owner }}'
+          aws_region: '${{ parameters.aws_region }}'
+          vpc_name: '${{ parameters.vpc_name }}'
+          cidr_vpc: '${{ parameters.cidr_vpc }}'
+          private_subnets: '${{#with parameters}} ${{#each private_subnets}}"${{this}}",${{/each}}${{/with}}'
+          public_subnets: '${{#with parameters}} ${{#each public_subnets}}"${{this}}",${{/each}}${{/with}}'
+          name_prefix_one: '${{ parameters.name_prefix_one }}'
+          from_port_one: '${{ parameters.from_port_one }}'
+          to_port_one: '${{ parameters.to_port_one }}'
+          cidr_security_group_one: '${{ parameters.cidr_security_group_one }}'
+          name_prefix_two: '${{ parameters.name_prefix_two }}'
+          from_port_two: '${{ parameters.from_port_two }}'
+          to_port_two: '${{ parameters.to_port_two }}'
+          cidr_security_group_two: '${{ parameters.cidr_security_group_two }}'
+          groups_name: '${{ parameters.groups_name }}'
+          instance_type: '${{ parameters.instance_type }}'
+          groups_name_2: '${{ parameters.groups_name_2 }}'
+          instance_type_2: '${{ parameters.instance_type_2 }}'
+
+
+    - id: publish
+      name: Publish
+      action: publish:gitlab
+      input:
+        defaultBranch: '${{ parameters.branch }}'
+        allowedHosts: ['gitlab.inlabs.app']
+        description: 'This is ${{ parameters.project_name }}'
+        repoUrl: '${{ parameters.repoUrl }}'
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: '${{ steps.publish.output.repoContentsUrl }}'
+        catalogInfoPath: '/catalog-info.yaml'
+
+  links:
+    - title: Repository
+      url: ${{ steps.publish.output.remoteUrl }}
+    - title: Open in catalog
+      icon: catalog
+      entityRef: ${{ steps.register.output.entityRef }}
+
