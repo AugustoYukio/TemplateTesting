@@ -1,9 +1,9 @@
-apiVersion: backstage.io/v1beta2
+apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: infra-base-template
-  title: Template base de infraestrutura
-  description: Criar infraestrutura base
+  name: infra-eks-template
+  title: Template de Infraestrutura Eks
+  description: Criar infraestrutura Eks
   tags:
     - recommended
     - terraform
@@ -12,13 +12,16 @@ spec:
   type: infra
 
   parameters:
-    - title: Preencha o nome da entidade
+    - title: Parametros gerais da infraestrutura
+      required:
+        - project_name
       properties:
-        name:
-          title: Name
+        project_name:
+          title: Nome do projeto
           type: string
-          description: My custom name for the component
-          ui:field: MyCustomExtension
+          description: Nome do projeto
+          ui:field: AWSAccountsExtension
+
     - title: Escolher repositorio
       required:
         - repoUrl
@@ -30,6 +33,12 @@ spec:
           ui:options:
             allowedHosts:
               - gitlab.inlabs.app
+        branch:
+          title: Branch
+          type: string
+          enum: ['master', 'development']
+          default: 'master'
+          description: 'Branch onde o projeto será comitado'
 
   steps:
     - id: template
@@ -40,22 +49,28 @@ spec:
         copyWithoutRender:
           - .gitlab/workflows/*
         values:
+          project_name: '${{ parameters.project_name }}'
+
 
     - id: publish
       name: Publish
       action: publish:gitlab
       input:
+        defaultBranch: '${{ parameters.branch }}'
         allowedHosts: ['gitlab.inlabs.app']
-        description: 'This is {{ parameters.project_name }}'
-        repoUrl: '{{ parameters.repoUrl }}'
+        description: 'This is ${{ parameters.project_name }}'
+        repoUrl: '${{ parameters.repoUrl }}'
 
     - id: register
       name: Register
       action: catalog:register
       input:
-        repoContentsUrl: '{{ steps.publish.output.repoContentsUrl }}'
+        repoContentsUrl: '${{ steps.publish.output.repoContentsUrl }}'
         catalogInfoPath: '/catalog-info.yaml'
 
-  output:
-    remoteUrl: '{{ steps.publish.output.remoteUrl }}'
-    entityRef: '{{ steps.register.output.entityRef }}'
+  links:
+    - title: Repository
+      url: ${{ steps.publish.output.remoteUrl }}
+    - title: Open in catalog
+      icon: catalog
+      entityRef: ${{ steps.register.output.entityRef }}
