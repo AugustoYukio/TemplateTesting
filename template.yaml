@@ -9,6 +9,9 @@ metadata:
     - terraform
   type: infra
 
+spec:
+  owner: web@example.com
+  type: infra
   parameters:
     - title: Parametros gerais da infraestrutura
       required:
